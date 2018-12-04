@@ -1,6 +1,11 @@
 import React from 'react';
 import Board from './Board';
 import checkRow from '../../../helperFunctions/checkRow';
+import checkCol from '../../../helperFunctions/checkCol';
+import checkMajorDiagnal from '../../../helperFunctions/checkMajorDiagnal';
+import checkMinorDiagnal from '../../../helperFunctions/checkMinorDiagnal';
+import VictoryPage from './VictoryPage';
+import axios from 'axios';
 
 class App extends React.Component {
   constructor(props) {
@@ -9,16 +14,23 @@ class App extends React.Component {
       size: 19,
       currentColor: 1,
       currentPosition: [0, 0],
-      boardState: this.createBoard(19),
+      boardState: this.createBoard(15),
       victory: false,
+      blackWin: 0,
+      whiteWin: 0
     };
     this.black = 1;
     this.white = 2;
     this.createBoard = this.createBoard.bind(this);
     this.handleOnClick = this.handleOnClick.bind(this);
+    this.fetch = this.fetch.bind(this);
   }
 
-  createBoard (size) {
+  componentDidMount() {
+    this.fetch();
+  }
+
+  createBoard(size) {
     let board = [];
     for (let i = 0; i < size; i++) {
       board[i] = [];
@@ -29,31 +41,112 @@ class App extends React.Component {
     return board;
   }
 
-  handleOnClick (e) {
+  fetch() {
+    axios
+      .get('/api/gomoku')
+      .then(result => {
+        console.log(result.data[0])
+        if (result.data[0].board !== '') {
+          this.setState({
+            boardState: JSON.parse(result.data[0].board),
+            currentColor: result.data[0].nextTurn
+          })
+        }
+        this.setState({
+          blackWin: result.data[0].black,
+          whiteWin: result.data[0].white
+        }, () => {
+          console.log(this.state.blackWin, this.state.whiteWin)
+        });
+      })
+      .catch(err => {
+        console.error('Client get Error: ', err);
+      });
+  }
+
+  handleOnClick(e) {
     let row = Number(e.target.className);
     let col = Number(e.target.id);
-    if (this.state.boardState[row][col] === 0) {
+    if (this.state.boardState[row][col] === 0 && !this.state.victory) {
       let newBoard = this.state.boardState.slice();
       newBoard[row][col] = this.state.currentColor;
-      this.setState({
-        boardState: newBoard,
-        currentPosition: [row, col],
-        currentColor: this.state.currentColor === this.black ? this.white: this.black
-      }, () => {
-        // if (checkRow(this.state.boardState, this.state.currentPosition)) {
-        //   console.log('VICTORY!')
-        // }
-      })
+      this.setState(
+        {
+          boardState: newBoard,
+          currentPosition: [row, col],
+          currentColor:
+            this.state.currentColor === this.black ? this.white : this.black
+        },
+        () => {
+          axios.put('/api/gomoku', {
+            black: this.state.blackWin,
+            white: this.state.whiteWin,
+            board: JSON.stringify(this.state.boardState),
+            nextTurn: this.state.currentColor
+          })
+          if (
+            checkRow(this.state.boardState, this.state.currentPosition) ||
+            checkCol(this.state.boardState, this.state.currentPosition) ||
+            checkMajorDiagnal(
+              this.state.boardState,
+              this.state.currentPosition
+            ) ||
+            checkMinorDiagnal(this.state.boardState, this.state.currentPosition)
+          ) {
+            if (this.state.currentColor === 2) {
+              this.setState(
+                {
+                  victory: true,
+                  blackWin: this.state.blackWin + 1
+                },
+                () => {
+                  axios.put('/api/gomoku', {
+                    black: this.state.blackWin,
+                    white: this.state.whiteWin,
+                    board: ''
+                  });
+                }
+              );
+            } else {
+              this.setState(
+                {
+                  victory: true,
+                  whiteWin: this.state.whiteWin + 1
+                },
+                () => {
+                  axios.put('/api/gomoku', {
+                    black: this.state.blackWin,
+                    white: this.state.whiteWin,
+                    board: ''
+                  });
+                }
+              );
+            }
+          }
+        }
+      );
     }
   }
 
-  render () {
+  render() {
     return (
       <div>
-        <Board boardState={this.state.boardState} handleOnClick={this.handleOnClick} currentColor={this.state.currentColor} size={this.state.size}/>
+        <h3>Black has won: {this.state.blackWin} times</h3>
+        <h3>White has won: {this.state.whiteWin} times</h3>
+        <Board
+          boardState={this.state.boardState}
+          handleOnClick={this.handleOnClick}
+          currentColor={this.state.currentColor}
+          size={this.state.size}
+        />
+        {this.state.victory ? (
+          <VictoryPage
+            victor={this.state.currentColor === this.black ? 'White' : 'Black'}
+          />
+        ) : null}
       </div>
-    )
-  };
-};
+    );
+  }
+}
 
 export default App;

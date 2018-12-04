@@ -3,6 +3,7 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const path = require('path');
 const router = require('./routes');
+const connection = require('../database');
 
 const app = express();
 

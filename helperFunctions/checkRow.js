@@ -1,18 +1,26 @@
 const checkRow = (board, currentPosition) => {
   let row = currentPosition[0];
-  let leftRow = currentPosition[0] - 1;
-  let col = currentPosition[1];
-  let valueToCheck = board[row, col];
+  let rightCol = currentPosition[1];
+  let leftCol = currentPosition[1] - 1;
+  let valueToCheck = board[row][rightCol];
   let count = 0;
   //check right
-  while (board[row, col] === valueToCheck) {
+  while (board[row][rightCol] === valueToCheck) {
     count += 1;
-    row += 1;
+    rightCol += 1;
+    if (rightCol >= board.length) {
+      break;
+    }
   }
   //check left
-  while (board[leftRow, col] === valueToCheck) {
-    count += 1;
-    leftRow -= 1;
+  if (leftCol >= 0) {
+    while (board[row][leftCol] === valueToCheck) {
+      count += 1;
+      leftCol -= 1;
+      if (leftCol < 0) {
+        break;
+      }
+    }
   }
   if (count === 5) {
     return true;
