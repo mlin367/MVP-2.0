@@ -1,4 +1,5 @@
 import React from 'react';
+import styles from '../css/Board.css';
 
 class Board extends React.Component {
   constructor(props) {
@@ -6,7 +7,7 @@ class Board extends React.Component {
     this.state = {
       currentColor: this.props.currentColor,
       visualBoardState: this.createBoard(this.props.boardState)
-    }
+    };
     this.createBoard = this.createBoard.bind(this);
   }
 
@@ -14,17 +15,32 @@ class Board extends React.Component {
     if (this.props.boardState !== prevProps.boardState) {
       this.setState({
         visualBoardState: this.createBoard(this.props.boardState)
-      })
+      });
     }
   }
 
-  createBoard (boardState) {
+  checkColor (col) {
+    if (col === 1) {
+      return styles.black;
+    } else if (col === 2) {
+      return styles.white;
+    } else {
+      return null;
+    }
+  }
+
+  createBoard(boardState) {
     return (
       <table>
         {boardState.map((row, i) => (
           <tr>
+            <div className={styles.line} />
             {row.map((col, j) => (
-              <td onClick={this.props.handleOnClick} className={i} id={j}>{col}</td>
+              <td onClick={this.props.handleOnClick} className={i} id={j}>
+                <div className={i === 14 ? null : styles.vertLine} />
+                <div className={this.checkColor(col)} />
+                {col}
+              </td>
             ))}
           </tr>
         ))}
@@ -33,11 +49,7 @@ class Board extends React.Component {
   }
 
   render() {
-    return (
-      <div>
-        {this.state.visualBoardState}
-      </div>
-    )
+    return <div className={styles.board}>{this.state.visualBoardState}</div>;
   }
 }
 

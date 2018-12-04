@@ -6,12 +6,13 @@ import checkMajorDiagnal from '../../../helperFunctions/checkMajorDiagnal';
 import checkMinorDiagnal from '../../../helperFunctions/checkMinorDiagnal';
 import VictoryPage from './VictoryPage';
 import axios from 'axios';
+import styles from '../css/App.css';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      size: 19,
+      size: 15,
       currentColor: 1,
       currentPosition: [0, 0],
       boardState: this.createBoard(15),
@@ -24,6 +25,7 @@ class App extends React.Component {
     this.createBoard = this.createBoard.bind(this);
     this.handleOnClick = this.handleOnClick.bind(this);
     this.fetch = this.fetch.bind(this);
+    this.buttonsOnClick = this.buttonsOnClick.bind(this);
   }
 
   componentDidMount() {
@@ -45,11 +47,14 @@ class App extends React.Component {
     axios
       .get('/api/gomoku')
       .then(result => {
-        console.log(result.data[0])
         if (result.data[0].board !== '') {
           this.setState({
             boardState: JSON.parse(result.data[0].board),
             currentColor: result.data[0].nextTurn
+          })
+        } else {
+          this.setState({
+            boardState: this.createBoard(15)
           })
         }
         this.setState({
@@ -65,8 +70,8 @@ class App extends React.Component {
   }
 
   handleOnClick(e) {
-    let row = Number(e.target.className);
-    let col = Number(e.target.id);
+    let row = Number(e.currentTarget.className);
+    let col = Number(e.currentTarget.id);
     if (this.state.boardState[row][col] === 0 && !this.state.victory) {
       let newBoard = this.state.boardState.slice();
       newBoard[row][col] = this.state.currentColor;
@@ -128,17 +133,60 @@ class App extends React.Component {
     }
   }
 
+  whosTurn () {
+    if (this.state.currentColor === 1) {
+      return "It is Black's turn!"
+    } else {
+      return "It is White's turn!"
+    }
+  }
+
+  buttonsOnClick (e) {
+    if (e.target.className === "clearWin") {
+      axios.put('/api/gomokuWipe', {
+        black: 0,
+        white: 0 
+      })
+      .then(result => {
+        this.fetch();
+      })
+    } else if (e.target.className === "clearBoard") {
+      this.setState({
+        victory: false,
+        currentColor: 1
+      })
+      axios.put('/api/gomokuWipe', {
+        board: '' 
+      })
+      .then(result => {
+        this.fetch();
+      })
+    }
+  }
+
   render() {
     return (
-      <div>
-        <h3>Black has won: {this.state.blackWin} times</h3>
-        <h3>White has won: {this.state.whiteWin} times</h3>
+      <div className={styles.appBody}>
+        <h1 className={styles.title}>
+          Gomoku!
+        </h1>
+        <div className={styles.win}>
+          <h3>Black has won: {this.state.blackWin} times</h3>
+          <h3>White has won: {this.state.whiteWin} times</h3>
+        </div>
         <Board
           boardState={this.state.boardState}
           handleOnClick={this.handleOnClick}
           currentColor={this.state.currentColor}
           size={this.state.size}
         />
+        <div className={styles.buttons}>
+          <button onClick={this.buttonsOnClick} className="clearWin"> Clear Win Record</button>
+          <button onClick={this.buttonsOnClick} className="clearBoard"> Clear Board</button>
+        </div>
+        <div className={styles.turn}>
+          {this.state.victory ? null: this.whosTurn()}
+        </div>
         {this.state.victory ? (
           <VictoryPage
             victor={this.state.currentColor === this.black ? 'White' : 'Black'}

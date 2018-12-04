@@ -1,0 +1,36 @@
+body {
+  font-family: "Gyosho";
+}
+
+.appBody {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: auto;
+}
+
+.title {
+  margin: auto;
+}
+
+.win {
+  margin: auto;
+  margin-bottom: 20px;
+  display: flex;
+}
+
+h3 {
+  margin: 5px;
+}
+
+.buttons {
+  margin: auto;
+  margin-top: 20px;
+  padding: 10px;
+}
+
+.turn {
+  position: absolute;
+  font-size: 20px;
+  margin-left: 200px;
+}
