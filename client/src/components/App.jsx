@@ -167,11 +167,12 @@ class App extends React.Component {
   render() {
     return (
       <div className={styles.appBody}>
-        <h1 className={styles.title}>
+        <div className={styles.title}>
           Gomoku!
-        </h1>
+        </div>
         <div className={styles.win}>
           <h3>Black has won: {this.state.blackWin} times</h3>
+          <h3>|</h3>
           <h3>White has won: {this.state.whiteWin} times</h3>
         </div>
         <Board

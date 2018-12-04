@@ -1,8 +1,9 @@
 body {
-  font-family: "Gyosho";
+  background-color: aliceblue;
 }
 
 .appBody {
+  font-family: "Gyosho";
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -10,20 +11,30 @@ body {
 }
 
 .title {
+  font-family: "Gyosho";
+  font-size: 48px;
   margin: auto;
 }
 
 .win {
   margin: auto;
+  font-size: 24px;
   margin-bottom: 20px;
   display: flex;
 }
 
 h3 {
-  margin: 5px;
+  font-family: "Gyosho";
+  margin: 10px;
+}
+
+button {
+  font-family: inherit;
+  font-size: 15px;
 }
 
 .buttons {
+  font-family: inherit;
   margin: auto;
   margin-top: 20px;
   padding: 10px;
@@ -31,6 +42,7 @@ h3 {
 
 .turn {
   position: absolute;
-  font-size: 20px;
-  margin-left: 200px;
+  font-size: 36px;
+  margin-left: 150px;
 }
+

@@ -4,6 +4,7 @@
 }
 
 table {
+  table-layout: fixed;
   user-select: none;
   border: 2px solid #522;
   background-color: #e9c372;
@@ -28,7 +29,7 @@ td {
   position: absolute;
   z-index: 2;
   margin-left: 23.3px;
-  width: 644px;
+  width: 658px;
   margin-top: 21px;
 }
 
