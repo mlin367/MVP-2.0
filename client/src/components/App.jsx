@@ -7,6 +7,7 @@ import checkMinorDiagnal from '../../../helperFunctions/checkMinorDiagnal';
 import VictoryPage from './VictoryPage';
 import axios from 'axios';
 import styles from '../css/App.css';
+import socketIOClient from 'socket.io-client';
 
 class App extends React.Component {
   constructor(props) {
@@ -18,7 +19,8 @@ class App extends React.Component {
       boardState: this.createBoard(15),
       victory: false,
       blackWin: 0,
-      whiteWin: 0
+      whiteWin: 0,
+      players: 0
     };
     this.black = 1;
     this.white = 2;
@@ -30,6 +32,12 @@ class App extends React.Component {
 
   componentDidMount() {
     this.fetch();
+    const socket = socketIOClient();
+    socket.on("getCount", count => {
+      this.setState({
+        players: total
+      })
+    })
   }
 
   createBoard(size) {
@@ -60,8 +68,6 @@ class App extends React.Component {
         this.setState({
           blackWin: result.data[0].black,
           whiteWin: result.data[0].white
-        }, () => {
-          console.log(this.state.blackWin, this.state.whiteWin)
         });
       })
       .catch(err => {
@@ -196,11 +202,6 @@ class App extends React.Component {
         <div className={styles.turn}>
           {this.state.victory ? null: this.whosTurn()}
         </div>
-        {/* {this.state.victory ? (
-          <VictoryPage
-            victor={this.state.currentColor === this.black ? 'White' : 'Black'}
-          />
-        ) : null} */}
       </div>
     );
   }
