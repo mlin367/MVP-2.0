@@ -29,7 +29,7 @@ class App extends React.Component {
     this.handleOnClick = this.handleOnClick.bind(this);
     this.fetch = this.fetch.bind(this);
     this.buttonsOnClick = this.buttonsOnClick.bind(this);
-    this.socket = socketIOClient('http://localhost:1338');
+    this.socket = socketIOClient();
   }
 
   componentDidMount() {
