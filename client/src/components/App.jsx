@@ -13,6 +13,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      playerColor: '',
       size: 15,
       currentColor: 1,
       currentPosition: [0, 0],
@@ -28,7 +29,7 @@ class App extends React.Component {
     this.handleOnClick = this.handleOnClick.bind(this);
     this.fetch = this.fetch.bind(this);
     this.buttonsOnClick = this.buttonsOnClick.bind(this);
-    this.socket = socketIOClient();
+    this.socket = socketIOClient('http://localhost:1338');
   }
 
   componentDidMount() {
@@ -38,6 +39,11 @@ class App extends React.Component {
         players: count
       });
     });
+    this.socket.on('playerColor', playerColor => {
+      this.setState({
+        playerColor
+      })
+    })
   }
 
   createBoard(size) {
@@ -81,7 +87,7 @@ class App extends React.Component {
   handleOnClick(e) {
     let row = Number(e.currentTarget.className);
     let col = Number(e.currentTarget.id);
-    if (this.state.boardState[row][col] === 0 && !this.state.victory) {
+    if (this.state.boardState[row][col] === 0 && !this.state.victory && this.state.currentColor === this.state.playerColor) {
       let newBoard = this.state.boardState.slice();
       newBoard[row][col] = this.state.currentColor;
       this.socket.emit('placePiece', {
@@ -216,10 +222,15 @@ class App extends React.Component {
           <div className={styles.turn}>
             {this.state.victory ? null : this.whosTurn()}
           </div>
+          <div className={styles.identity}>
+            Your color piece is {this.state.playerColor === 1 ? 'Black' : 'White'}
+          </div>
         </div>
       );
+    } else if (this.state.players < 2) {
+      return <h1 className={styles.waiting}>Waiting for two players to join!</h1>;
     } else {
-      return <h1>Waiting for two players to join!</h1>;
+      return <h1 className={styles.loser}>Sorry, two players are already currently playing!</h1>
     }
   }
 }

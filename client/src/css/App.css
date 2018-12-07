@@ -4,7 +4,12 @@ body {
 
 .waiting {
   font-family: "Gyosho";
-  margin: auto;
+  text-align: center;
+}
+
+.loser {
+  font-family: "Gyosho";
+  text-align: center;
 }
 
 .appBody {
