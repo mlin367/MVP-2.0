@@ -26,15 +26,36 @@ io.on('connection', socket => {
   } else {
     console.log(`${total} user(s) has connected`);
     socket.emit('getCount', total);
+
+    socket.on('fetch', result => {
+      io.emit('fetch', result);
+    });
+
+    socket.on('placePiece', obj => {
+      io.emit('placePiece', obj);
+    });
+
+    socket.on('blackWin', obj => {
+      io.emit('blackWin', obj);
+    });
+
+    socket.on('whiteWin', obj => {
+      io.emit('whiteWin', obj);
+    });
+
+    socket.on('clearBoard', obj => {
+      io.emit('clearBoard', obj);
+    });
+
     socket.on('disconnect', () => {
       console.log('user disconnected');
-    })
+    });
   }
-})
+});
 
 http.listen(1337, () => {
-  console.log('listening on *:1337')
-})
+  console.log('listening on *:1337');
+});
 
 // app.listen(port, () => {
 //   console.log(`app is listening on port ${port}`);

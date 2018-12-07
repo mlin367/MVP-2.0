@@ -2,6 +2,11 @@ body {
   background-color: aliceblue;
 }
 
+.waiting {
+  font-family: "Gyosho";
+  margin: auto;
+}
+
 .appBody {
   font-family: "Gyosho";
   display: flex;

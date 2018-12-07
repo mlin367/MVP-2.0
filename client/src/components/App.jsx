@@ -28,16 +28,16 @@ class App extends React.Component {
     this.handleOnClick = this.handleOnClick.bind(this);
     this.fetch = this.fetch.bind(this);
     this.buttonsOnClick = this.buttonsOnClick.bind(this);
+    this.socket = socketIOClient();
   }
 
   componentDidMount() {
     this.fetch();
-    const socket = socketIOClient();
-    socket.on("getCount", count => {
+    this.socket.on('getCount', count => {
       this.setState({
-        players: total
-      })
-    })
+        players: count
+      });
+    });
   }
 
   createBoard(size) {
@@ -55,19 +55,22 @@ class App extends React.Component {
     axios
       .get('/api/gomoku')
       .then(result => {
-        if (result.data[0].board !== '') {
+        this.socket.emit('fetch', result);
+        this.socket.on('fetch', result => {
+          if (result.data[0].board !== '') {
+            this.setState({
+              boardState: JSON.parse(result.data[0].board),
+              currentColor: result.data[0].nextTurn
+            });
+          } else {
+            this.setState({
+              boardState: this.createBoard(15)
+            });
+          }
           this.setState({
-            boardState: JSON.parse(result.data[0].board),
-            currentColor: result.data[0].nextTurn
-          })
-        } else {
-          this.setState({
-            boardState: this.createBoard(15)
-          })
-        }
-        this.setState({
-          blackWin: result.data[0].black,
-          whiteWin: result.data[0].white
+            blackWin: result.data[0].black,
+            whiteWin: result.data[0].white
+          });
         });
       })
       .catch(err => {
@@ -81,20 +84,20 @@ class App extends React.Component {
     if (this.state.boardState[row][col] === 0 && !this.state.victory) {
       let newBoard = this.state.boardState.slice();
       newBoard[row][col] = this.state.currentColor;
-      this.setState(
-        {
-          boardState: newBoard,
-          currentPosition: [row, col],
-          currentColor:
-            this.state.currentColor === this.black ? this.white : this.black
-        },
-        () => {
+      this.socket.emit('placePiece', {
+        boardState: newBoard,
+        currentPosition: [row, col],
+        currentColor:
+          this.state.currentColor === this.black ? this.white : this.black
+      });
+      this.socket.on('placePiece', obj => {
+        this.setState(obj, () => {
           axios.put('/api/gomoku', {
             black: this.state.blackWin,
             white: this.state.whiteWin,
             board: JSON.stringify(this.state.boardState),
             nextTurn: this.state.currentColor
-          })
+          });
           if (
             checkRow(this.state.boardState, this.state.currentPosition) ||
             checkCol(this.state.boardState, this.state.currentPosition) ||
@@ -105,105 +108,119 @@ class App extends React.Component {
             checkMinorDiagnal(this.state.boardState, this.state.currentPosition)
           ) {
             if (this.state.currentColor === 2) {
-              this.setState(
-                {
-                  victory: true,
-                  blackWin: this.state.blackWin + 1
-                },
-                () => {
+              this.socket.emit('blackWin', {
+                victory: true,
+                blackWin: this.state.blackWin + 1
+              });
+              this.socket.on('blackWin', obj => {
+                this.setState(obj, () => {
                   axios.put('/api/gomoku', {
                     black: this.state.blackWin,
                     white: this.state.whiteWin,
                     board: ''
                   });
-                }
-              );
+                });
+              });
             } else {
-              this.setState(
-                {
-                  victory: true,
-                  whiteWin: this.state.whiteWin + 1
-                },
-                () => {
+              this.socket.emit('whiteWin', {
+                victory: true,
+                whiteWin: this.state.whiteWin + 1
+              });
+              this.socket.on('whiteWin', obj => {
+                this.setState(obj, () => {
                   axios.put('/api/gomoku', {
                     black: this.state.blackWin,
                     white: this.state.whiteWin,
                     board: ''
                   });
-                }
-              );
+                });
+              });
             }
           }
-        }
-      );
+        });
+      });
     }
   }
 
-  whosTurn () {
+  whosTurn() {
     if (this.state.currentColor === 1) {
-      return "It is Black's turn!"
+      return "It is Black's turn!";
     } else {
-      return "It is White's turn!"
+      return "It is White's turn!";
     }
   }
 
-  buttonsOnClick (e) {
-    if (e.target.className === "clearWin") {
-      axios.put('/api/gomokuWipe', {
-        black: 0,
-        white: 0 
-      })
-      .then(result => {
-        this.fetch();
-      })
-    } else if (e.target.className === "clearBoard") {
-      this.setState({
+  buttonsOnClick(e) {
+    if (e.target.className === 'clearWin') {
+      axios
+        .put('/api/gomokuWipe', {
+          black: 0,
+          white: 0
+        })
+        .then(result => {
+          this.fetch();
+        });
+    } else if (e.target.className === 'clearBoard') {
+      this.socket.emit('clearBoard', {
         victory: false,
         currentColor: 1
-      })
-      axios.put('/api/gomokuWipe', {
-        board: '' 
-      })
-      .then(result => {
-        this.fetch();
-      })
+      });
+      this.socket.on('clearBoard', obj => {
+        this.setState(obj);
+        axios
+          .put('/api/gomokuWipe', {
+            board: ''
+          })
+          .then(result => {
+            this.fetch();
+          });
+      });
     }
   }
 
   render() {
-    return (
-      <div className={styles.appBody}>
-        <div className={styles.title}>
-          Gomoku!
+    if (this.state.players === 2) {
+      return (
+        <div className={styles.appBody}>
+          <div className={styles.title}>Gomoku!</div>
+          <div className={styles.win}>
+            <h3>Black has won: {this.state.blackWin} times</h3>
+            <h3>|</h3>
+            <h3>White has won: {this.state.whiteWin} times</h3>
+          </div>
+          <div className={styles.boardWin}>
+            <Board
+              boardState={this.state.boardState}
+              handleOnClick={this.handleOnClick}
+              currentColor={this.state.currentColor}
+              size={this.state.size}
+            />
+            {this.state.victory ? (
+              <VictoryPage
+                victor={
+                  this.state.currentColor === this.black ? 'White' : 'Black'
+                }
+              />
+            ) : null}
+          </div>
+          <div className={styles.buttons}>
+            <button onClick={this.buttonsOnClick} className="clearWin">
+              {' '}
+              Clear Win Record
+            </button>
+            <button onClick={this.buttonsOnClick} className="clearBoard">
+              {' '}
+              Clear Board
+            </button>
+          </div>
+          <div className={styles.turn}>
+            {this.state.victory ? null : this.whosTurn()}
+          </div>
         </div>
-        <div className={styles.win}>
-          <h3>Black has won: {this.state.blackWin} times</h3>
-          <h3>|</h3>
-          <h3>White has won: {this.state.whiteWin} times</h3>
-        </div>
-        <div className={styles.boardWin}>
-        <Board
-          boardState={this.state.boardState}
-          handleOnClick={this.handleOnClick}
-          currentColor={this.state.currentColor}
-          size={this.state.size}
-        />
-        {this.state.victory ? (
-          <VictoryPage
-            victor={this.state.currentColor === this.black ? 'White' : 'Black'}
-          />
-        ) : null}
-
-        </div>
-        <div className={styles.buttons}>
-          <button onClick={this.buttonsOnClick} className="clearWin"> Clear Win Record</button>
-          <button onClick={this.buttonsOnClick} className="clearBoard"> Clear Board</button>
-        </div>
-        <div className={styles.turn}>
-          {this.state.victory ? null: this.whosTurn()}
-        </div>
-      </div>
-    );
+      );
+    } else {
+      return <h1>Waiting for two players to join!</h1>;
+    }
   }
 }
 
