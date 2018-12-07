@@ -175,12 +175,20 @@ class App extends React.Component {
           <h3>|</h3>
           <h3>White has won: {this.state.whiteWin} times</h3>
         </div>
+        <div className={styles.boardWin}>
         <Board
           boardState={this.state.boardState}
           handleOnClick={this.handleOnClick}
           currentColor={this.state.currentColor}
           size={this.state.size}
         />
+        {this.state.victory ? (
+          <VictoryPage
+            victor={this.state.currentColor === this.black ? 'White' : 'Black'}
+          />
+        ) : null}
+
+        </div>
         <div className={styles.buttons}>
           <button onClick={this.buttonsOnClick} className="clearWin"> Clear Win Record</button>
           <button onClick={this.buttonsOnClick} className="clearBoard"> Clear Board</button>
@@ -188,11 +196,11 @@ class App extends React.Component {
         <div className={styles.turn}>
           {this.state.victory ? null: this.whosTurn()}
         </div>
-        {this.state.victory ? (
+        {/* {this.state.victory ? (
           <VictoryPage
             victor={this.state.currentColor === this.black ? 'White' : 'Black'}
           />
-        ) : null}
+        ) : null} */}
       </div>
     );
   }

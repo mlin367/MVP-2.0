@@ -52,6 +52,10 @@ button {
 .turn {
   position: absolute;
   font-size: 36px;
-  margin-left: 150px;
+  margin-left: 50px;
 }
 
+.boardWin {
+  display: flex;
+  flex-direction: column;
+}
