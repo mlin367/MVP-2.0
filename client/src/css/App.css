@@ -69,3 +69,9 @@ button {
   display: flex;
   flex-direction: column;
 }
+
+.identity {
+  margin-left: 80%;
+  position: absolute;
+  font-size: 20px;
+}

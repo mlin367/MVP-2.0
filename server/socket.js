@@ -7,7 +7,6 @@ io.on('connection', socket => {
   let total = io.engine.clientsCount;
   if (total > 2) {
     console.log('sorry only two players allowed at a time');
-    socket.emit('loser', 'loser');
     socket.disconnect();
   } else {
     io.emit('getCount', total);

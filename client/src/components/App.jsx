@@ -13,7 +13,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      playerColor: '',
+      playerColor: 0,
       size: 15,
       currentColor: 1,
       currentPosition: [0, 0],
@@ -34,16 +34,80 @@ class App extends React.Component {
 
   componentDidMount() {
     this.fetch();
+
     this.socket.on('getCount', count => {
       this.setState({
         players: count
       });
     });
+
     this.socket.on('playerColor', playerColor => {
       this.setState({
         playerColor
-      })
-    })
+      });
+    });
+
+    this.socket.on('clearBoard', obj => {
+      this.setState(obj, () => {
+        axios
+          .put('/api/gomokuWipe', {
+            board: ''
+          })
+          .then(result => {
+            this.fetch();
+          });
+      });
+    });
+
+    this.socket.on('placePiece', obj => {
+      this.setState(obj, () => {
+        axios.put('/api/gomoku', {
+          black: this.state.blackWin,
+          white: this.state.whiteWin,
+          board: JSON.stringify(this.state.boardState),
+          nextTurn: this.state.currentColor
+        });
+        if (
+          checkRow(this.state.boardState, this.state.currentPosition) ||
+          checkCol(this.state.boardState, this.state.currentPosition) ||
+          checkMajorDiagnal(
+            this.state.boardState,
+            this.state.currentPosition
+          ) ||
+          checkMinorDiagnal(this.state.boardState, this.state.currentPosition)
+        ) {
+          if (this.state.currentColor === 2) {
+            this.socket.emit('blackWin', {
+              victory: true,
+              blackWin: this.state.blackWin + 1
+            });
+            this.socket.on('blackWin', obj => {
+              this.setState(obj, () => {
+                axios.put('/api/gomoku', {
+                  black: this.state.blackWin,
+                  white: this.state.whiteWin,
+                  board: ''
+                });
+              });
+            });
+          } else {
+            this.socket.emit('whiteWin', {
+              victory: true,
+              whiteWin: this.state.whiteWin + 1
+            });
+            this.socket.on('whiteWin', obj => {
+              this.setState(obj, () => {
+                axios.put('/api/gomoku', {
+                  black: this.state.blackWin,
+                  white: this.state.whiteWin,
+                  board: ''
+                });
+              });
+            });
+          }
+        }
+      });
+    });
   }
 
   createBoard(size) {
@@ -87,7 +151,11 @@ class App extends React.Component {
   handleOnClick(e) {
     let row = Number(e.currentTarget.className);
     let col = Number(e.currentTarget.id);
-    if (this.state.boardState[row][col] === 0 && !this.state.victory && this.state.currentColor === this.state.playerColor) {
+    if (
+      this.state.boardState[row][col] === 0 &&
+      !this.state.victory &&
+      this.state.currentColor === this.state.playerColor
+    ) {
       let newBoard = this.state.boardState.slice();
       newBoard[row][col] = this.state.currentColor;
       this.socket.emit('placePiece', {
@@ -96,55 +164,7 @@ class App extends React.Component {
         currentColor:
           this.state.currentColor === this.black ? this.white : this.black
       });
-      this.socket.on('placePiece', obj => {
-        this.setState(obj, () => {
-          axios.put('/api/gomoku', {
-            black: this.state.blackWin,
-            white: this.state.whiteWin,
-            board: JSON.stringify(this.state.boardState),
-            nextTurn: this.state.currentColor
-          });
-          if (
-            checkRow(this.state.boardState, this.state.currentPosition) ||
-            checkCol(this.state.boardState, this.state.currentPosition) ||
-            checkMajorDiagnal(
-              this.state.boardState,
-              this.state.currentPosition
-            ) ||
-            checkMinorDiagnal(this.state.boardState, this.state.currentPosition)
-          ) {
-            if (this.state.currentColor === 2) {
-              this.socket.emit('blackWin', {
-                victory: true,
-                blackWin: this.state.blackWin + 1
-              });
-              this.socket.on('blackWin', obj => {
-                this.setState(obj, () => {
-                  axios.put('/api/gomoku', {
-                    black: this.state.blackWin,
-                    white: this.state.whiteWin,
-                    board: ''
-                  });
-                });
-              });
-            } else {
-              this.socket.emit('whiteWin', {
-                victory: true,
-                whiteWin: this.state.whiteWin + 1
-              });
-              this.socket.on('whiteWin', obj => {
-                this.setState(obj, () => {
-                  axios.put('/api/gomoku', {
-                    black: this.state.blackWin,
-                    white: this.state.whiteWin,
-                    board: ''
-                  });
-                });
-              });
-            }
-          }
-        });
-      });
+      
     }
   }
 
@@ -170,16 +190,6 @@ class App extends React.Component {
       this.socket.emit('clearBoard', {
         victory: false,
         currentColor: 1
-      });
-      this.socket.on('clearBoard', obj => {
-        this.setState(obj);
-        axios
-          .put('/api/gomokuWipe', {
-            board: ''
-          })
-          .then(result => {
-            this.fetch();
-          });
       });
     }
   }
@@ -223,14 +233,21 @@ class App extends React.Component {
             {this.state.victory ? null : this.whosTurn()}
           </div>
           <div className={styles.identity}>
-            Your color piece is {this.state.playerColor === 1 ? 'Black' : 'White'}
+            Your color piece is{' '}
+            {this.state.playerColor === 1 ? 'Black' : 'White'}
           </div>
         </div>
       );
     } else if (this.state.players < 2) {
-      return <h1 className={styles.waiting}>Waiting for two players to join!</h1>;
+      return (
+        <h1 className={styles.waiting}>Waiting for two players to join!</h1>
+      );
     } else {
-      return <h1 className={styles.loser}>Sorry, two players are already currently playing!</h1>
+      return (
+        <h1 className={styles.loser}>
+          Sorry, two players are already currently playing!
+        </h1>
+      );
     }
   }
 }

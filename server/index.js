@@ -19,43 +19,42 @@ const port = 1337;
 app.use('/api', router);
 
 io.on('connection', socket => {
-  let total = io.engine.clientsCount;
-  if (total > 2) {
+
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
+  });
+
+  let total = Object.keys(io.sockets.sockets);
+  console.log(`${total.length} user(s) has connected`);
+  if (total.length > 2) {
     console.log('sorry only two players allowed at a time');
+    socket.emit('getCount', total.length);
     socket.disconnect();
-  } else {
-    if (total === 1) {
-      socket.emit('playerColor', 1);
-    } else {
-      socket.emit('playerColor', 2);
-    }
-    console.log(`${total} user(s) has connected`);
-    io.emit('getCount', total);
+  } else if (total.length === 2) {
+    io.to(total[0]).emit('playerColor', 1);
+    io.to(total[1]).emit('playerColor', 2);
+    io.emit('getCount', total.length);
+  } 
 
-    socket.on('fetch', result => {
-      io.emit('fetch', result);
-    });
+  socket.on('fetch', result => {
+    io.emit('fetch', result);
+  });
 
-    socket.on('placePiece', obj => {
-      io.emit('placePiece', obj);
-    });
+  socket.on('placePiece', obj => {
+    io.emit('placePiece', obj);
+  });
 
-    socket.on('blackWin', obj => {
-      io.emit('blackWin', obj);
-    });
+  socket.on('blackWin', obj => {
+    io.emit('blackWin', obj);
+  });
 
-    socket.on('whiteWin', obj => {
-      io.emit('whiteWin', obj);
-    });
+  socket.on('whiteWin', obj => {
+    io.emit('whiteWin', obj);
+  });
 
-    socket.on('clearBoard', obj => {
-      io.emit('clearBoard', obj);
-    });
-
-    socket.on('disconnect', () => {
-      console.log('user disconnected');
-    });
-  }
+  socket.on('clearBoard', obj => {
+    io.emit('clearBoard', obj);
+  });
 });
 
 http.listen(1337, () => {
