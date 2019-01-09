@@ -1,0 +1,15 @@
+version: '3'
+services: 
+  db: 
+    restart: always
+    image: mongo
+    ports: 
+      - '27017:27017'
+    volumes:
+      - ./docker/data/db:/var/lib/mongo
+  app: 
+    build: .
+    ports:
+      - '1337:1337'
+    depends_on:
+      - db 
