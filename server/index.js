@@ -8,6 +8,7 @@ const connection = require('../database');
 const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
+io.listen('http://18.219.171.152:1337');
 
 app.use(morgan('dev'));
 app.use(bodyParser.json());
@@ -57,7 +58,9 @@ io.on('connection', socket => {
   });
 });
 
-http.listen(1337, 'http://18.219.171.152');
+http.listen(1337, () => {
+  console.log("listening on 8008 -> 1337")
+});
 
 // app.listen(port, () => {
 //   console.log(`app is listening on port ${port}`);
