@@ -11,6 +11,6 @@ services:
     restart: always 
     build: .
     ports:
-      - '8008:1337'
+      - '1337:1337'
     depends_on:
       - db 
