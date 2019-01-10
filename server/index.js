@@ -57,9 +57,7 @@ io.on('connection', socket => {
   });
 });
 
-http.listen(1337, () => {
-  console.log('listening on *:1337');
-});
+http.listen(1337, 'http://18.219.171.152:1337');
 
 // app.listen(port, () => {
 //   console.log(`app is listening on port ${port}`);
