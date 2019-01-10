@@ -8,7 +8,6 @@ const connection = require('../database');
 const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
-io.listen('http://18.219.171.152:1337');
 
 app.use(morgan('dev'));
 app.use(bodyParser.json());
