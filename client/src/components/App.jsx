@@ -29,7 +29,7 @@ class App extends React.Component {
     this.handleOnClick = this.handleOnClick.bind(this);
     this.fetch = this.fetch.bind(this);
     this.buttonsOnClick = this.buttonsOnClick.bind(this);
-    this.socket = socketIOClient.connect('http://ec2-18-219-171-152.us-east-2.compute.amazonaws.com:1337', {path: });
+    this.socket = socketIOClient.connect('http://ec2-18-219-171-152.us-east-2.compute.amazonaws.com:1337');
     axios.defaults.baseURL = 'http://ec2-18-219-171-152.us-east-2.compute.amazonaws.com:1337';
   }
 
