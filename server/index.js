@@ -57,7 +57,7 @@ io.on('connection', socket => {
   });
 });
 
-http.listen(1337, '18.219.171.152', () => {
+http.listen(1337, () => {
   console.log("listening on 8008 -> 1337")
 });
 
