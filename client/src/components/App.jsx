@@ -29,8 +29,8 @@ class App extends React.Component {
     this.handleOnClick = this.handleOnClick.bind(this);
     this.fetch = this.fetch.bind(this);
     this.buttonsOnClick = this.buttonsOnClick.bind(this);
-    this.socket = socketIOClient.connect('http://18.219.171.152:1337');
-    axios.defaults.baseURL = 'http://18.219.171.152:1337';
+    this.socket = socketIOClient.connect();
+    // axios.defaults.baseURL = 'http://18.219.171.152:1337';
   }
 
   componentDidMount() {

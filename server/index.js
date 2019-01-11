@@ -58,7 +58,7 @@ io.on('connection', socket => {
 });
 
 http.listen(1337, () => {
-  console.log("listening on 8008 -> 1337")
+  console.log("listening on 1337")
 });
 
 // app.listen(port, () => {
