@@ -1,3 +1,9 @@
+@font-face {
+  font-family: 'Gyosho';
+  src: url('https://s3.us-east-2.amazonaws.com/matthew-site/Gyosho.ttf')
+    format('ttf');
+}
+
 body {
   background-color: aliceblue;
 }
