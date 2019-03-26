@@ -31,33 +31,16 @@ class Board extends React.Component {
 
   createBoard(boardState) {
     return (
-      // <table>
-      //   {boardState.map((row, i) => (
-      //     <tr>
-      //       <div className={styles.line} />
-      //       {row.map((col, j) => (
-      //         <td onClick={this.props.handleOnClick} className={i} id={j}>
-      //           <div className={i === 14 ? null : styles.vertLine} />
-      //           <div className={this.checkColor(col)} />
-      //           {col}
-      //         </td>
-      //       ))}
-      //     </tr>
-      //   ))}
-      // </table>
       <div className={styles.overallBoard}>
         <div className={styles.board}>
           {boardState.map((row, i) =>
             row.map((col, j) => (
-              <div
-                onClick={this.props.handleOnClick}
+              <div>
+                <div onClick={this.props.handleOnClick}
                 data-rownum={i}
                 className={styles.intersection}
-                id={j}
-              >
-                <div className={i === 14 ? null : styles.vertLine} />
+                id={j} />
                 <div className={this.checkColor(col)} />
-                {col}
               </div>
             ))
           )}

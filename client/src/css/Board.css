@@ -1,7 +1,9 @@
 .overallBoard {
-  border: 1px solid black;
+  background-color: #e9c372;
+  border: 2px solid #522;;
   width: 750px;
   height: 750px;
+  cursor: pointer;
 }
 
 .board {
@@ -9,6 +11,7 @@
   display: grid;
   grid-template-rows: repeat(15, 50px);
   grid-template-columns: repeat(15, 50px);
+  z-index: 5
 }
 
 .outlineBoard {
@@ -18,17 +21,41 @@
   grid-template-columns: repeat(14, 50px);
   left: 25.5px;
   top: 25px;
-  z-index: -1;
+  z-index: 0;
 }
 
 .outlineIntersection {
-  border: 1px solid black;
+  border: 1px solid #522;;
 }
 
 .intersection {
-  text-align: center;
-  padding: 30%;
+  height: 10px;
+  width: 10px;
+  position: relative;
+  top: 20px;
+  left: 20px;
 }
+
+.black {
+  position: relative;
+  left: 3px;
+  bottom: 6px;
+  height: 45px;
+  width: 45px;
+  background-color: black;
+  border-radius: 50%;
+  box-shadow: inset -4px -4px 8px rgba(255, 255, 255, .3);
+}
+
+.white {
+  position: relative;
+  left: 3px;
+  bottom: 6px;
+  height: 45px;
+  width: 45px;
+  background-color: white;
+  border-radius: 50%;
+  box-shadow: inset -5px -5px 8px rgba(0,0,0,.5)}
 
 @media only screen and (max-width: 600px) {
   .board {
@@ -36,8 +63,27 @@
     grid-template-columns: repeat(15, 20px);
   }
 
+  .black {
+    left: 1px;
+    bottom: 10px;
+    height: 20px;
+    width: 20px;
+  }
+
+  .intersection {
+    top: 5px;
+    left: 6px;
+  }
+
+  .white {
+    left: 1px;
+    bottom: 10px;
+    height: 20px;
+    width: 20px;
+  }
+
   .outlineBoard {
-    top: 15px;
+    top: 10px;
     left: 10px;
     grid-template-rows: repeat(14, 20px);
     grid-template-columns: repeat(14, 20px);
@@ -53,6 +99,25 @@
   .board {
     grid-template-rows: repeat(15, 40px);
     grid-template-columns: repeat(15, 40px);
+  }
+
+  .black {
+    left: 2px;
+    bottom: 7px;
+    height: 37px;
+    width: 37px;
+  }
+
+  .intersection {
+    top: 17px;
+    left: 15px;
+  }
+
+  .white {
+    left: 2px;
+    bottom: 7px;
+    height: 37px;
+    width: 37px;
   }
 
   .outlineBoard {
@@ -108,26 +173,7 @@ td {
   border-left: 2px solid #522;
 }
 
-.black {
-  position: absolute;
-  height: 25px;
-  width: 25px;
-  margin: -7px;
-  background-color: black;
-  z-index: 4;
-  border-radius: 50%;
-  box-shadow: inset -4px -4px 8px rgba(255, 255, 255, .3);
-}
 
-.white {
-  position: absolute;
-  height: 25px;
-  width: 25px;
-  margin: -7px;
-  background-color: white;
-  z-index: 4;
-  border-radius: 50%;
-  box-shadow: inset -5px -5px 8px rgba(0,0,0,.5);}
 
 table td {
   width: 11px;
