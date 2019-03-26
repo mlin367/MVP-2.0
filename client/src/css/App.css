@@ -11,20 +11,16 @@ body {
 }
 
 .title {
-  font-family: "Gyosho";
   font-size: 48px;
-  margin: auto;
 }
 
 .win {
-  margin: auto;
   font-size: 24px;
   margin-bottom: 20px;
   display: flex;
 }
 
 h3 {
-  font-family: "Gyosho";
   margin: 10px;
 }
 .buttons {
@@ -55,4 +51,10 @@ button {
 .boardWin {
   display: flex;
   flex-direction: row;
+}
+
+@media only screen and (max-width: 600px) {
+  h3 {
+    font-size: 17px;
+  }
 }

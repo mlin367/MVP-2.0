@@ -31,25 +31,37 @@ class Board extends React.Component {
 
   createBoard(boardState) {
     return (
-      <table>
+      // <table>
+      //   {boardState.map((row, i) => (
+      //     <tr>
+      //       <div className={styles.line} />
+      //       {row.map((col, j) => (
+      //         <td onClick={this.props.handleOnClick} className={i} id={j}>
+      //           <div className={i === 14 ? null : styles.vertLine} />
+      //           <div className={this.checkColor(col)} />
+      //           {col}
+      //         </td>
+      //       ))}
+      //     </tr>
+      //   ))}
+      // </table>
+      <div className={styles.board}>
         {boardState.map((row, i) => (
-          <tr>
-            <div className={styles.line} />
-            {row.map((col, j) => (
-              <td onClick={this.props.handleOnClick} className={i} id={j}>
+            // <div className={styles.line} />
+            row.map((col, j) => (
+              <div onClick={this.props.handleOnClick} className={`${i} ${styles.intersection}`} id={j}>
                 <div className={i === 14 ? null : styles.vertLine} />
                 <div className={this.checkColor(col)} />
                 {col}
-              </td>
-            ))}
-          </tr>
+              </div>
+            ))
         ))}
-      </table>
+      </div>
     );
   }
 
   render() {
-    return <div className={styles.board}>{this.state.visualBoardState}</div>;
+    return this.state.visualBoardState;
   }
 }
 

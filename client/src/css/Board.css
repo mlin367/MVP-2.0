@@ -1,6 +1,12 @@
- /* .board {
+.board {
+  display: grid;
+  grid-template-rows: repeat(15, 50px);
+  grid-template-columns: repeat(15, 50px);
+}
+
+.intersection {
   margin: auto;
-} */
+}
 
 /*table {
   user-select: none;
