@@ -19,7 +19,7 @@ class Board extends React.Component {
     }
   }
 
-  checkColor (col) {
+  checkColor(col) {
     if (col === 1) {
       return styles.black;
     } else if (col === 2) {
@@ -45,17 +45,28 @@ class Board extends React.Component {
       //     </tr>
       //   ))}
       // </table>
-      <div className={styles.board}>
-        {boardState.map((row, i) => (
-            // <div className={styles.line} />
+      <div className={styles.overallBoard}>
+        <div className={styles.board}>
+          {boardState.map((row, i) =>
             row.map((col, j) => (
-              <div onClick={this.props.handleOnClick} className={`${i} ${styles.intersection}`} id={j}>
+              <div
+                onClick={this.props.handleOnClick}
+                data-rownum={i}
+                className={styles.intersection}
+                id={j}
+              >
                 <div className={i === 14 ? null : styles.vertLine} />
                 <div className={this.checkColor(col)} />
                 {col}
               </div>
             ))
-        ))}
+          )}
+        </div>
+        <div className={styles.outlineBoard}>
+          {boardState.map((row, i) =>
+            row.map((col, j) => i === 14 || j === 14 ? null : <div className={styles.outlineIntersection}/>)
+          )}
+        </div>
       </div>
     );
   }

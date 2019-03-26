@@ -70,7 +70,7 @@ class App extends React.Component {
   }
 
   handleOnClick(e) {
-    let row = Number(e.currentTarget.className);
+    let row = Number(e.currentTarget.getAttribute('data-rownum'));
     let col = Number(e.currentTarget.id);
     if (this.state.boardState[row][col] === 0 && !this.state.victory) {
       let newBoard = this.state.boardState.slice();
@@ -150,7 +150,7 @@ class App extends React.Component {
       .then(result => {
         this.fetch();
       })
-    } else if (e.target.className === "clearBoard") {
+    } else if (e.target.id === "clearBoard") {
       this.setState({
         victory: false,
         currentColor: 1
@@ -188,7 +188,7 @@ class App extends React.Component {
         ) : <h1 className={styles.turn}>{this.whosTurn()}</h1>}
         <div className={styles.buttons}>
           <button onClick={this.buttonsOnClick} className="clearWin"> Clear Win Record</button>
-          <button onClick={this.buttonsOnClick} className={styles.clearBoard}> Clear Board</button>
+          <button onClick={this.buttonsOnClick} id="clearBoard" className={styles.clearBoard}> Clear Board</button>
         </div>
       </div>
     );

@@ -1,12 +1,74 @@
+.overallBoard {
+  border: 1px solid black;
+  width: 750px;
+  height: 750px;
+}
+
 .board {
+  position: absolute;
   display: grid;
   grid-template-rows: repeat(15, 50px);
   grid-template-columns: repeat(15, 50px);
 }
 
-.intersection {
-  margin: auto;
+.outlineBoard {
+  position: relative;
+  display: grid;
+  grid-template-rows: repeat(14, 50px);
+  grid-template-columns: repeat(14, 50px);
+  left: 25.5px;
+  top: 25px;
+  z-index: -1;
 }
+
+.outlineIntersection {
+  border: 1px solid black;
+}
+
+.intersection {
+  text-align: center;
+  padding: 30%;
+}
+
+@media only screen and (max-width: 600px) {
+  .board {
+    grid-template-rows: repeat(15, 20px);
+    grid-template-columns: repeat(15, 20px);
+  }
+
+  .outlineBoard {
+    top: 15px;
+    left: 10px;
+    grid-template-rows: repeat(14, 20px);
+    grid-template-columns: repeat(14, 20px);
+  }
+
+  .overallBoard {
+    width: 300px;
+    height: 300px;
+  }
+}
+
+@media only screen and (min-width: 601px) and (max-width: 800px) {
+  .board {
+    grid-template-rows: repeat(15, 40px);
+    grid-template-columns: repeat(15, 40px);
+  }
+
+  .outlineBoard {
+    top: 22px;
+    left: 20px;
+    grid-template-rows: repeat(14, 40px);
+    grid-template-columns: repeat(14, 40px);
+  }
+
+  .overallBoard {
+    width: 600px;
+    height: 600px;
+  }
+}
+
+
 
 /*table {
   user-select: none;
