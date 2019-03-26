@@ -27,6 +27,10 @@ h3 {
   font-family: "Gyosho";
   margin: 10px;
 }
+.buttons {
+  display: flex;
+  font-family: inherit;
+}
 
 button {
   font-family: inherit;
@@ -34,20 +38,14 @@ button {
   background-color: #555555; /* Green */
   border: none;
   color: white;
-  padding: 15px 32px;
+  padding: 15px 10px;
   text-align: center;
   text-decoration: none;
-  display: inline-block;
   font-size: 16px;
-  margin-right: 15px;
 }
 
 .clearBoard {
-  margin-right: 0;
-}
-
-.buttons {
-  font-family: inherit;
+  margin-left: 10px;
 }
 
 .turn {
