@@ -7,7 +7,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin: auto;
+  align-items: center;
 }
 
 .title {
@@ -42,20 +42,19 @@ button {
   margin-right: 15px;
 }
 
+.clearBoard {
+  margin-right: 0;
+}
+
 .buttons {
   font-family: inherit;
-  margin: auto;
-  margin-top: 20px;
-  padding: 10px;
 }
 
 .turn {
-  position: absolute;
-  font-size: 36px;
-  margin-left: 50px;
+  color: red;
 }
 
 .boardWin {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
 }

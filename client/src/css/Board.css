@@ -1,9 +1,8 @@
-.board {
-  display: flex;
-  justify-content: center;
-}
+ /* .board {
+  margin: auto;
+} */
 
-table {
+/*table {
   user-select: none;
   border: 2px solid #522;
   background-color: #e9c372;
@@ -67,4 +66,4 @@ table td {
   overflow: hidden;
   display: inline-block;
   white-space: nowrap;
-}
+} */
