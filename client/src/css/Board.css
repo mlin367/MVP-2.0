@@ -44,7 +44,7 @@
   width: 45px;
   background-color: black;
   border-radius: 50%;
-  box-shadow: inset -4px -4px 8px rgba(255, 255, 255, .3);
+  box-shadow: inset -5px -5px 8px rgba(183, 183, 183, 0.5);
 }
 
 .white {
