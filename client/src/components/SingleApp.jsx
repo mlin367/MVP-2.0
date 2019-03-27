@@ -23,7 +23,6 @@ class App extends React.Component {
     this.white = 2;
     this.createBoard = this.createBoard.bind(this);
     this.handleOnClick = this.handleOnClick.bind(this);
-    this.fetch = this.fetch.bind(this);
     this.buttonsOnClick = this.buttonsOnClick.bind(this);
   }
 
@@ -31,6 +30,10 @@ class App extends React.Component {
     this.setState({
       boardState: this.createBoard(15)
     });
+
+    if (window.socket) {
+      window.socket.disconnect();
+    }
   }
 
   createBoard(size) {

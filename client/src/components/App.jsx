@@ -29,26 +29,26 @@ class App extends React.Component {
     this.handleOnClick = this.handleOnClick.bind(this);
     this.fetch = this.fetch.bind(this);
     this.buttonsOnClick = this.buttonsOnClick.bind(this);
-    this.socket = socketIOClient.connect();
+    window.socket = socketIOClient.connect();
     // axios.defaults.baseURL = '';
   }
 
   componentDidMount() {
     this.fetch();
 
-    this.socket.on('getCount', count => {
+    window.socket.on('getCount', count => {
       this.setState({
         players: count
       });
     });
 
-    this.socket.on('playerColor', playerColor => {
+    window.socket.on('playerColor', playerColor => {
       this.setState({
         playerColor
       });
     });
 
-    this.socket.on('clearBoard', obj => {
+    window.socket.on('clearBoard', obj => {
       this.setState(obj, () => {
         axios
           .put('/api/gomokuWipe', {
@@ -60,7 +60,7 @@ class App extends React.Component {
       });
     });
 
-    this.socket.on('placePiece', obj => {
+    window.socket.on('placePiece', obj => {
       this.setState(obj, () => {
         axios.put('/api/gomoku', {
           black: this.state.blackWin,
@@ -78,11 +78,11 @@ class App extends React.Component {
           checkMinorDiagnal(this.state.boardState, this.state.currentPosition)
         ) {
           if (this.state.currentColor === 2) {
-            this.socket.emit('blackWin', {
+            window.socket.emit('blackWin', {
               victory: true,
               blackWin: this.state.blackWin + 1
             });
-            this.socket.on('blackWin', obj => {
+            window.socket.on('blackWin', obj => {
               this.setState(obj, () => {
                 axios.put('/api/gomoku', {
                   black: this.state.blackWin,
@@ -92,11 +92,11 @@ class App extends React.Component {
               });
             });
           } else {
-            this.socket.emit('whiteWin', {
+            window.socket.emit('whiteWin', {
               victory: true,
               whiteWin: this.state.whiteWin + 1
             });
-            this.socket.on('whiteWin', obj => {
+            window.socket.on('whiteWin', obj => {
               this.setState(obj, () => {
                 axios.put('/api/gomoku', {
                   black: this.state.blackWin,
@@ -126,8 +126,8 @@ class App extends React.Component {
     axios
       .get('/api/gomoku')
       .then(result => {
-        this.socket.emit('fetch', result);
-        this.socket.on('fetch', result => {
+        window.socket.emit('fetch', result);
+        window.socket.on('fetch', result => {
           if (result.data[0].board !== '') {
             this.setState({
               boardState: JSON.parse(result.data[0].board),
@@ -159,7 +159,7 @@ class App extends React.Component {
     ) {
       let newBoard = this.state.boardState.slice();
       newBoard[row][col] = this.state.currentColor;
-      this.socket.emit('placePiece', {
+      window.socket.emit('placePiece', {
         boardState: newBoard,
         currentPosition: [row, col],
         currentColor:
@@ -188,7 +188,7 @@ class App extends React.Component {
           this.fetch();
         });
     } else if (e.target.id === 'clearBoard') {
-      this.socket.emit('clearBoard', {
+      window.socket.emit('clearBoard', {
         victory: false,
         currentColor: 1
       });

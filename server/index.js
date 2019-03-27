@@ -18,6 +18,10 @@ const port = 1337;
 
 app.use('/api', router);
 
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '/../client/dist/index.html'))
+})
+
 io.on('connection', socket => {
 
   socket.on('disconnect', () => {
