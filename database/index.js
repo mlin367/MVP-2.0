@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/Gomoku');
+mongoose.connect('mongodb://db/Gomoku');
 
 const connection = mongoose.connection;
 connection.on('error', console.error.bind(console, 'connection error: '));
