@@ -150,7 +150,7 @@ class App extends React.Component {
   }
 
   handleOnClick(e) {
-    let row = Number(e.currentTarget.className);
+    let row = Number(e.currentTarget.getAttribute('data-rownum'));
     let col = Number(e.currentTarget.id);
     if (
       this.state.boardState[row][col] === 0 &&
@@ -205,7 +205,6 @@ class App extends React.Component {
             <h3>|</h3>
             <h3>White has won: {this.state.whiteWin} times</h3>
           </div>
-          <div className={styles.boardWin}>
             <Board
               boardState={this.state.boardState}
               handleOnClick={this.handleOnClick}
@@ -218,30 +217,29 @@ class App extends React.Component {
                   this.state.currentColor === this.black ? 'White' : 'Black'
                 }
               />
-            ) : null}
-          </div>
+            ) : <h1 className={styles.turn}>{this.whosTurn()}</h1>}
+          <h2 className={styles.identity}>
+            Your color piece is{' '}
+            {this.state.playerColor === 1 ? 'Black' : 'White'}
+          </h2>
           <div className={styles.buttons}>
             <button onClick={this.buttonsOnClick} className="clearWin">
               {' '}
               Clear Win Record
             </button>
-            <button onClick={this.buttonsOnClick} className="clearBoard">
+            <button onClick={this.buttonsOnClick} className={styles.clearBoard}>
               {' '}
               Clear Board
             </button>
-          </div>
-          <div className={styles.turn}>
-            {this.state.victory ? null : this.whosTurn()}
-          </div>
-          <div className={styles.identity}>
-            Your color piece is{' '}
-            {this.state.playerColor === 1 ? 'Black' : 'White'}
           </div>
         </div>
       );
     } else if (this.state.players < 2) {
       return (
-        <h1 className={styles.waiting}>Waiting for two players to join!</h1>
+        <div className={styles.waiting}>
+          <h1>Waiting for two players to join!</h1>
+          <h3>OR you can test concurrent play by loading this site on two different tabs/windows!</h3>
+        </div>
       );
     } else {
       return (

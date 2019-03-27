@@ -1,5 +1,4 @@
 .victory {
-  position: absolute;
-  margin-top: 15%;
-  width: 25%;
+  text-align: center;
+  color: red;
 }

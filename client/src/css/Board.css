@@ -1,70 +1,134 @@
-.board {
-  display: flex;
-  justify-content: center;
-}
-
-table {
-  user-select: none;
-  border: 2px solid #522;
+.overallBoard {
   background-color: #e9c372;
-  padding: 0px;
-}
-
-tr {
-  z-index: 0;
-  padding: 0px;
-  line-height: 10px;
+  border: 2px solid #522;;
+  width: 750px;
+  height: 750px;
   cursor: pointer;
 }
 
-td {
-  z-index: 10;
-  color: rgba(0, 0, 0, 0);
-  padding: 18px;
+.board {
+  position: absolute;
+  display: grid;
+  grid-template-rows: repeat(15, 50px);
+  grid-template-columns: repeat(15, 50px);
+  z-index: 5
 }
 
-.line {
-  border: 1px solid #522;
-  position: absolute;
-  z-index: 2;
-  margin-left: 23.3px;
-  width: 655px;
-  margin-top: 21px;
+.outlineBoard {
+  position: relative;
+  display: grid;
+  grid-template-rows: repeat(14, 50px);
+  grid-template-columns: repeat(14, 50px);
+  left: 25.5px;
+  top: 25px;
+  z-index: 0;
 }
 
-.vertLine {
-  margin-top: 3px;
-  height: 50px;
-  z-index: 3;
-  margin-left: 3px;
-  position: absolute;
-  border-left: 2px solid #522;
+.outlineIntersection {
+  border: 1px solid #522;;
+}
+
+.intersection {
+  height: 10px;
+  width: 10px;
+  position: relative;
+  top: 20px;
+  left: 20px;
 }
 
 .black {
-  position: absolute;
-  height: 25px;
-  width: 25px;
-  margin: -7px;
+  position: relative;
+  left: 3px;
+  bottom: 6px;
+  height: 45px;
+  width: 45px;
   background-color: black;
-  z-index: 4;
   border-radius: 50%;
-  box-shadow: inset -4px -4px 8px rgba(255, 255, 255, .3);
+  box-shadow: inset -5px -5px 8px rgba(183, 183, 183, 0.5);
 }
 
 .white {
-  position: absolute;
-  height: 25px;
-  width: 25px;
-  margin: -7px;
+  position: relative;
+  left: 3px;
+  bottom: 6px;
+  height: 45px;
+  width: 45px;
   background-color: white;
-  z-index: 4;
   border-radius: 50%;
-  box-shadow: inset -5px -5px 8px rgba(0,0,0,.5);}
+  box-shadow: inset -5px -5px 8px rgba(0,0,0,.5)}
 
-table td {
-  width: 11px;
-  overflow: hidden;
-  display: inline-block;
-  white-space: nowrap;
+@media only screen and (max-width: 600px) {
+  .board {
+    grid-template-rows: repeat(15, 20px);
+    grid-template-columns: repeat(15, 20px);
+  }
+
+  .black {
+    left: 1px;
+    bottom: 10px;
+    height: 20px;
+    width: 20px;
+  }
+
+  .intersection {
+    top: 5px;
+    left: 6px;
+  }
+
+  .white {
+    left: 1px;
+    bottom: 10px;
+    height: 20px;
+    width: 20px;
+  }
+
+  .outlineBoard {
+    top: 10px;
+    left: 10px;
+    grid-template-rows: repeat(14, 20px);
+    grid-template-columns: repeat(14, 20px);
+  }
+
+  .overallBoard {
+    width: 300px;
+    height: 300px;
+  }
+}
+
+@media only screen and (min-width: 601px) and (max-width: 800px) {
+  .board {
+    grid-template-rows: repeat(15, 40px);
+    grid-template-columns: repeat(15, 40px);
+  }
+
+  .black {
+    left: 2px;
+    bottom: 7px;
+    height: 37px;
+    width: 37px;
+  }
+
+  .intersection {
+    top: 17px;
+    left: 15px;
+  }
+
+  .white {
+    left: 2px;
+    bottom: 7px;
+    height: 37px;
+    width: 37px;
+  }
+
+  .outlineBoard {
+    top: 22px;
+    left: 20px;
+    grid-template-rows: repeat(14, 40px);
+    grid-template-columns: repeat(14, 40px);
+  }
+
+  .overallBoard {
+    width: 600px;
+    height: 600px;
+  }
 }

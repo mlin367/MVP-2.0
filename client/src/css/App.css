@@ -6,43 +6,32 @@
 
 body {
   background-color: aliceblue;
-  font-family: 'Gyosho'
-}
-
-.waiting {
   font-family: "Gyosho";
-  text-align: center;
-}
-
-.loser {
-  font-family: "Gyosho";
-  text-align: center;
 }
 
 .appBody {
-  font-family: "Gyosho";
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin: auto;
+  align-items: center;
 }
 
 .title {
-  font-family: "Gyosho";
   font-size: 48px;
-  margin: auto;
 }
 
 .win {
-  margin: auto;
   font-size: 24px;
   margin-bottom: 20px;
   display: flex;
 }
 
 h3 {
-  font-family: "Gyosho";
   margin: 10px;
+}
+.buttons {
+  display: flex;
+  font-family: inherit;
 }
 
 button {
@@ -51,34 +40,39 @@ button {
   background-color: #555555; /* Green */
   border: none;
   color: white;
-  padding: 15px 32px;
+  padding: 15px 10px;
   text-align: center;
   text-decoration: none;
-  display: inline-block;
   font-size: 16px;
-  margin-right: 15px;
 }
 
-.buttons {
-  font-family: inherit;
-  margin: auto;
-  margin-top: 20px;
-  padding: 10px;
+.clearBoard {
+  margin-left: 10px;
 }
 
 .turn {
-  position: absolute;
-  font-size: 36px;
-  margin-left: 50px;
+  color: red;
+}
+
+.identity {
+  color: palevioletred;
 }
 
 .boardWin {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
 }
 
-.identity {
-  margin-left: 80%;
-  position: absolute;
-  font-size: 20px;
+.waiting  {
+  text-align: center;
+}
+
+.loser {
+  margin: auto;
+}
+
+@media only screen and (max-width: 600px) {
+  h3 {
+    font-size: 17px;
+  }
 }
