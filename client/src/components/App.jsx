@@ -30,7 +30,7 @@ class App extends React.Component {
     this.fetch = this.fetch.bind(this);
     this.buttonsOnClick = this.buttonsOnClick.bind(this);
     this.socket = socketIOClient.connect();
-    axios.defaults.baseURL = 'http://18.223.98.89:1337';
+    // axios.defaults.baseURL = '';
   }
 
   componentDidMount() {
@@ -187,7 +187,7 @@ class App extends React.Component {
         .then(result => {
           this.fetch();
         });
-    } else if (e.target.className === 'clearBoard') {
+    } else if (e.target.id === 'clearBoard') {
       this.socket.emit('clearBoard', {
         victory: false,
         currentColor: 1
@@ -227,7 +227,7 @@ class App extends React.Component {
               {' '}
               Clear Win Record
             </button>
-            <button onClick={this.buttonsOnClick} className={styles.clearBoard}>
+            <button onClick={this.buttonsOnClick} id="clearBoard" className={styles.clearBoard}>
               {' '}
               Clear Board
             </button>
