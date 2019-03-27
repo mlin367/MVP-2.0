@@ -205,6 +205,10 @@ class App extends React.Component {
             <h3>|</h3>
             <h3>White has won: {this.state.whiteWin} times</h3>
           </div>
+          <h2 className={styles.identity}>
+            Your color piece is{' '}
+            {this.state.playerColor === 1 ? 'Black' : 'White'}
+          </h2>
             <Board
               boardState={this.state.boardState}
               handleOnClick={this.handleOnClick}
@@ -218,10 +222,6 @@ class App extends React.Component {
                 }
               />
             ) : <h1 className={styles.turn}>{this.whosTurn()}</h1>}
-          <h2 className={styles.identity}>
-            Your color piece is{' '}
-            {this.state.playerColor === 1 ? 'Black' : 'White'}
-          </h2>
           <div className={styles.buttons}>
             <button onClick={this.buttonsOnClick} className="clearWin">
               {' '}
