@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon ./server",
     "socket": "nodemon ./server/socket.js",
-    "build": "webpack -w"
+    "build": "webpack"
   },
   "keywords": [],
   "author": "",
