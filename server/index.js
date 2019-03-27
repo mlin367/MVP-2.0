@@ -4,11 +4,13 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const router = require('./routes');
 const connection = require('../database');
+const cors = require('cors');
 
 const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 
+app.use(cors());
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
